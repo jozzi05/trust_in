@@ -12,7 +12,7 @@ class TrustIn
     @evaluations.each do |evaluation|
       if evaluation.type == 'SIREN'
         if evaluation.score.positive? && evaluation.state == 'unconfirmed' && evaluation.reason == 'ongoing_database_update'
-          uri = URI('https://public.opendatasoft.com/api/records/1.0/search/?dataset=sirene_v3' \
+          uri = URI('https://public.opendatasoft.com/api/records/1.0/search/?dataset=economicref-france-sirene-v3' \
             "&q=#{evaluation.value}&sort=datederniertraitementetablissement" \
             '&refine.etablissementsiege=oui')
           response = Net::HTTP.get(uri)
@@ -36,7 +36,7 @@ class TrustIn
         elsif evaluation.score <= 50 && evaluation.score.positive?
           evaluation.score = evaluation.score - 1 if evaluation.state == 'unconfirmed' && evaluation.reason == 'unable_to_reach_api' || evaluation.state == 'favorable'
         elsif evaluation.state == 'favorable' || evaluation.state == 'unconfirmed'
-          uri = URI('https://public.opendatasoft.com/api/records/1.0/search/?dataset=sirene_v3' \
+          uri = URI('https://public.opendatasoft.com/api/records/1.0/search/?dataset=economicref-france-sirene-v3' \
               "&q=#{evaluation.value}&sort=datederniertraitementetablissement" \
               '&refine.etablissementsiege=oui')
           response = Net::HTTP.get(uri)
