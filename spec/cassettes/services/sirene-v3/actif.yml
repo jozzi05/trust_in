@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - openresty
       Date:
-      - Sat, 19 Aug 2023 19:54:10 GMT
+      - Sat, 19 Aug 2023 22:03:07 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -33,7 +33,7 @@ http_interactions:
       Cache-Control:
       - public, max-age=60
       X-Ratelimit-Remaining:
-      - '9999942289'
+      - '9999933749'
       X-Ratelimit-Limit:
       - '10000000000'
       X-Ratelimit-Reset:
@@ -111,5 +111,5 @@ http_interactions:
         "coordinates": [2.367315, 48.878932]}, "record_timestamp": "2023-08-07T13:45:00Z"}],
         "facet_groups": [{"name": "etablissementsiege", "facets": [{"name": "oui",
         "count": 1, "state": "refined", "path": "oui"}]}]}'
-  recorded_at: Sat, 19 Aug 2023 19:54:10 GMT
+  recorded_at: Sat, 19 Aug 2023 22:03:07 GMT
 recorded_with: VCR 6.2.0
