@@ -2,6 +2,7 @@
 
 require_relative 'support/vcr'
 require_relative 'support/simplecov'
+require_relative 'support/factory_bot'
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|

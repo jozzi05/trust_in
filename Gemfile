@@ -14,4 +14,6 @@ group :test do
   gem 'webmock'
 
   gem 'simplecov', require: false
+
+  gem 'factory_bot', '~> 6.2'
 end
