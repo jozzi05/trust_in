@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-
+require 'spec_helper'
 require 'trust_in'
 
 RSpec.describe TrustIn do
-  describe '#update_score()' do
+  describe '#update_score', :vcr do
     subject!(:update_score) { described_class.new(evaluations).update_score }
 
     context "when the evaluation type is 'SIREN'" do
