@@ -25,3 +25,5 @@ Layout/LineLength:
   Enabled: false
 Style/Documentation:
   Enabled: false
+Lint/AmbiguousBlockAssociation:
+  Enabled: false

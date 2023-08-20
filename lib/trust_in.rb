@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'siren/evaluation_updater'
+require 'vat/evaluation_updater'
 require 'evaluation'
 
 class TrustIn
@@ -10,7 +11,11 @@ class TrustIn
 
   def update_score
     @evaluations.each do |evaluation|
-      Siren::EvaluationUpdater.new(evaluation).call if evaluation.type == 'SIREN'
+      if evaluation.type == 'SIREN'
+        Siren::EvaluationUpdater.new(evaluation).call
+      elsif evaluation.type == 'VAT'
+        Vat::EvaluationUpdater.new(evaluation).call
+      end
     end
   end
 end

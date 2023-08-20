@@ -2,13 +2,27 @@
 
 require 'trust_in'
 
+RSpec.shared_examples :triggers_vat_evaluation do
+  before do
+    allow(Vat::CompanyStateService)
+      .to receive(:fetch_details).with(evaluation.value).and_return(state: 'favorable', reason: 'company_opened')
+  end
+
+  it "assigns evaluation's state&reason based on the API response and a score to 100" do
+    expect { update_score }
+      .to change(evaluation, :state).to('favorable')
+      .and change(evaluation, :reason).to('company_opened')
+      .and change(evaluation, :score).to(100)
+  end
+end
+
 RSpec.describe TrustIn do
   describe '#update_score' do
-    subject!(:update_score) { described_class.new(evaluations).update_score }
-
     let(:evaluations) { [evaluation] }
 
     context "when the evaluation type is 'SIREN'" do
+      subject!(:update_score) { described_class.new(evaluations).update_score }
+
       context "with a <score> greater or equal to 50 AND the <state> is unconfirmed and the <reason> is 'unable_to_reach_api'" do
         let(:evaluation) { build(:evaluation, :siren, :unconfirmed, :unable_to_reach_api, score: 79) }
 
@@ -110,6 +124,58 @@ RSpec.describe TrustIn do
 
         it 'does not call the API' do
           expect(Net::HTTP).not_to receive(:get)
+        end
+      end
+    end
+
+    context "when the evaluation type is 'VAT'" do
+      subject(:update_score) { described_class.new(evaluations).update_score }
+
+      context 'with unfavorable state' do
+        let(:evaluation) { build(:evaluation, :vat, :unfavorable) }
+
+        it 'does nothing' do
+          expect { update_score }.not_to change { evaluation }
+        end
+      end
+
+      context 'with score equal zero' do
+        let(:evaluation) { build(:evaluation, :vat, score: 0) }
+
+        include_examples :triggers_vat_evaluation
+      end
+
+      context 'with unconfirmed state and reason set to ongoing_database_update' do
+        let(:evaluation) { build(:evaluation, :vat, :unconfirmed, :ongoing_database_update) }
+
+        include_examples :triggers_vat_evaluation
+      end
+
+      context 'with unconfirmed state and reason set to unable_to_reach_api' do
+        let(:evaluation) { build(:evaluation, :vat, :unconfirmed, :unable_to_reach_api, score:) }
+
+        context 'with score below 50' do
+          let(:score) { 45 }
+
+          it 'decreases score by 3' do
+            expect { update_score }.to change(evaluation, :score).by(-3)
+          end
+        end
+
+        context 'with score above or equal 50' do
+          let(:score) { 50 }
+
+          it 'decreases score by 1' do
+            expect { update_score }.to change(evaluation, :score).by(-1)
+          end
+        end
+      end
+
+      context 'with favorable state' do
+        let(:evaluation) { build(:evaluation, :vat, :unconfirmed, :unable_to_reach_api, score: 55) }
+
+        it 'decreases score by 1' do
+          expect { update_score }.to change(evaluation, :score).by(-1)
         end
       end
     end
