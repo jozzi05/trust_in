@@ -172,7 +172,7 @@ RSpec.describe TrustIn do
       end
 
       context 'with favorable state' do
-        let(:evaluation) { build(:evaluation, :vat, :unconfirmed, :unable_to_reach_api, score: 55) }
+        let(:evaluation) { build(:evaluation, :vat, :favorable, score: 4) }
 
         it 'decreases score by 1' do
           expect { update_score }.to change(evaluation, :score).by(-1)
