@@ -2,7 +2,7 @@
 
 require 'trust_in'
 
-RSpec.shared_examples :triggers_vat_evaluation do
+RSpec.shared_examples 'triggers vat evaluation with service data' do
   before do
     allow(Vat::CompanyStateService)
       .to receive(:fetch_details).with(evaluation.value).and_return(state: 'favorable', reason: 'company_opened')
@@ -142,13 +142,13 @@ RSpec.describe TrustIn do
       context 'with score equal zero' do
         let(:evaluation) { build(:evaluation, :vat, score: 0) }
 
-        include_examples :triggers_vat_evaluation
+        include_examples 'triggers vat evaluation with service data'
       end
 
       context 'with unconfirmed state and reason set to ongoing_database_update' do
         let(:evaluation) { build(:evaluation, :vat, :unconfirmed, :ongoing_database_update) }
 
-        include_examples :triggers_vat_evaluation
+        include_examples 'triggers vat evaluation with service data'
       end
 
       context 'with unconfirmed state and reason set to unable_to_reach_api' do
