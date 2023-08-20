@@ -2,12 +2,19 @@
 
 FactoryBot.define do
   factory :evaluation do
-    value { '123456789' }
     score { 50 }
     reason { 'company_closed' }
 
-    trait(:siren) { type { 'SIREN' } }
-    trait(:vat) { type { 'VAT' } }
+    trait(:siren) do
+      type { 'SIREN' }
+      value { '123456789' }
+    end
+
+    trait(:vat) do
+      type { 'VAT' }
+      value { 'IE6388047V' }
+    end
+
     trait(:unconfirmed) { state { 'unconfirmed' } }
     trait(:favorable) { state { 'favorable' } }
     trait(:unfavorable) { state { 'unfavorable' } }
